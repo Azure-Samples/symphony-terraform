@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  KEY_VAULT_NAME: "kv-symphony-environments" #GitLeaksIgnore
+  KEY_VAULT_NAME: "kv-xswaymzo-114" #GitLeaksIgnore
   PR_ENVIRONMENT_DIRECTORY: "pr"
   TERRAFORM_VERSION: "1.6.2"
   RUN_LAYER_TESTS: true

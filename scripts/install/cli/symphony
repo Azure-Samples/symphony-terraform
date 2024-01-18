@@ -151,19 +151,19 @@ configure_orchestrator() {
   if [[ $is_mac == 0 ]]; then
     sedCommand="sed -i '' -e "
   fi
-  eval "git grep -l 'kv-symphony-environments' | xargs $sedCommand \"s/kv-symphony-environments/${SYMPHONY_KV_NAME}/g\""
-  eval "git grep -l 'devops-symphony-362' | xargs $sedCommand \"s/devops-symphony-362/${SYMPHONY_RG_NAME}/g\""
+  eval "git grep -l 'kv-xswaymzo-114' | xargs $sedCommand \"s/kv-xswaymzo-114/${SYMPHONY_KV_NAME}/g\""
+  eval "git grep -l 'rg-xswaymzo-114' | xargs $sedCommand \"s/rg-xswaymzo-114/${SYMPHONY_RG_NAME}/g\""
   eval "git grep -l 'AzureCloud' -- ':!*_helpers.sh' | xargs $sedCommand \"s/AzureCloud/$SP_CLOUD_ENVIRONMENT/g\""
 
   server_endpoint="$(get_acr_login_endpoint)"
-  eval "git grep -l 'crsymphony360.azurecr.io' | xargs $sedCommand \"s/crsymphony360.azurecr.io/${SYMPHONY_ACR_NAME}${server_endpoint}/g\""
-  eval "git grep -l 'crsymphony360' | xargs $sedCommand \"s/crsymphony360/${SYMPHONY_ACR_NAME}/g\""
+  eval "git grep -l 'crxswaymzo114.azurecr.io' | xargs $sedCommand \"s/crxswaymzo114.azurecr.io/${SYMPHONY_ACR_NAME}${server_endpoint}/g\""
+  eval "git grep -l 'crxswaymzo114' | xargs $sedCommand \"s/crxswaymzo114/${SYMPHONY_ACR_NAME}/g\""
 
   if [ "$IACTOOL" == "bicep" ]; then
     create_pipelines_bicep
   else
     # Update SA state Name
-    eval "git grep -l 'symphonyremotestate360' | xargs $sedCommand \"s/symphonyremotestate360/${SYMPHONY_SA_STATE_NAME}/g\""
+    eval "git grep -l 'saxswaymzo114' | xargs $sedCommand \"s/saxswaymzo114/${SYMPHONY_SA_STATE_NAME}/g\""
     create_pipelines_terraform
   fi
 
