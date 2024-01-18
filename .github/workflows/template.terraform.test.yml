@@ -1,0 +1,91 @@
+---
+name: "Template-TF-Test"
+
+on: # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      environmentName:
+        type: string
+        required: true
+      goVersion:
+        type: string
+        required: true
+      terraformVersion:
+        type: string
+        required: true
+      keyVaultName:
+        type: string
+        required: true
+      branchName:
+        type: string
+        required: true
+
+    secrets:
+      azureEnviromentCredentials:
+        required: true
+
+jobs:
+  Test:
+    name: "E2E Test"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branchName }}
+
+      - name: Setup Toolset
+        run: |
+          ./setup-azcli.sh
+          ./setup-terraform.sh ${{ inputs.terraformVersion }}
+        working-directory: scripts/orchestrators
+        shell: bash
+
+      - uses: Azure/login@v1
+        name: Run Azure Login
+        with:
+          creds: "${{ secrets.azureEnviromentCredentials }}"
+          environment: "AzureCloud"
+
+      - name: Get KeyVault Secret(s)
+        id: LoadSecrets
+        env:
+          SECRETS: "clientId, clientSecret, subscriptionId, tenantId, stateRg, stateContainer, stateStorageAccount"
+          KEY_VAULT_NAME: ${{ inputs.keyVaultName }}
+        run: ./github.loadsecrets.sh
+        working-directory: scripts/orchestrators
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ inputs.goVersion }}
+      - name: Run E2E Tests
+        env:
+          WORKSPACE_PATH: ${{ github.workspace }}
+          ENVIRONMENT_NAME: ${{ inputs.environmentName }}
+          TEST_TAG: ""
+        run: |
+          export ARM_TENANT_ID=${{ steps.LoadSecrets.outputs.tenantId }}
+          export ARM_SUBSCRIPTION_ID=${{ steps.LoadSecrets.outputs.subscriptionId }}
+          export ARM_CLIENT_ID=${{ steps.LoadSecrets.outputs.clientId }}
+          export ARM_CLIENT_SECRET=${{ steps.LoadSecrets.outputs.clientSecret }}
+          export STATE_RG=${{ steps.LoadSecrets.outputs.stateRg }}
+          export STATE_STORAGE_ACCOUNT=${{ steps.LoadSecrets.outputs.stateStorageAccount }}
+          export STATE_CONTAINER=${{ steps.LoadSecrets.outputs.stateContainer }}
+          export TF_VAR_ENV=${{ inputs.environmentName }}
+          ./iac.tf.test.sh
+
+        working-directory: scripts/orchestrators
+        shell: bash
+
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: E2E Test results
+          path: ./IAC/Terraform/test/terraform/*.xml
+
+      - name: Publish E2E Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: "./IAC/Terraform/test/terraform/*.xml"
+          check_name: "E2E Tests Results"
+          action_fail: true
