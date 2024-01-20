@@ -1,18 +1,12 @@
-# Symphony
+# Symphony Terraform Reference Implementation
+
+This repository contains a reference implementation project and was generated using [Symphony.](https://github.com/microsoft/symphony) Symphony configures IAC repositories with pipelines and settings needed to achieve CI/CD for Infrastructure as code. To create a repository configured with Symphony best practices, please visit the [Symphony repository](https://github.com/microsoft/symphony/blob/main/docs/GETTING_STARTED.md) to get a step by step guide to bootstrap a new project.
+
+This Symphony implementation features GitHub Actions as an Orchestrator and Terraform as the IAC tool.
 
 Symphony is a framework and set of patterns and best practices for developing, testing, and deploying infrastructure on Azure using Infrastructure as Code (IAC.) It includes modern DevOps practices for IAC  such as Main and Pull Request workflows, IaC Code Validation & Linting, Automated Testing, Security Scanning, Multi-environment deployments, modules dependencies and more.
 
 It is an enterprise-level CI/CD multi-orchestrator, multi-IaC framework that encapsulates those best practices and guidelines for developing, testing, and deploying infrastructure as code to host large-scale solutions and get your production ready in no time.
-
-Symphony supports the following IAC tools:
-
-- Terraform
-- Bicep
-
-Symphony supports the following Build Orchestrators:
-
-- Azure DevOps
-- GitHub
 
 ## Why use Symphony
 
@@ -26,10 +20,6 @@ Symphony offers the workflows needed to implement IaC automation. Symphony provi
 | Modules & End to end testing | Symphony  provides samples to write, execute, and report on module tests and end to end tests for the IaC modules.                                                          |
 | Multi Environment support    | Symphony offers a clear pattern to store different IaC modules configurations per environment allowing the workflows can swap configs based on target environment           |
 
-## Getting Started
-
-Follow step-by-step instructions in the [Getting Started Document](./docs/GETTING_STARTED.md)
-
 ## Symphony Workflows
 
 A mature workflow for IAC not only automates the deployment of the IAC resources but also incorporates engineering fundamentals, resources validation, dependency management, test execution, security scanning, and more. Symphony offers multiple workflows to ensure engineering excellence at every stage of the IaC process. Find more in the [Symphony Workflows Document](./docs/WORKFLOW.md).
@@ -41,10 +31,6 @@ An environment in Symphony is represented by a set of configuration files, each 
 ## Symphony Testing
 
 Symphony offers samples to write and execute both modules and end-to-end tests for the IaC module code and how the tests are integrated into the symphony workflows. Find more in the [Symphony Testing Document](./docs/TESTING.md)
-
-## Contributing
-
-Contributions to the project are welcome! Please follow [Contributing Guide](CONTRIBUTING.md).
 
 ## License
 
